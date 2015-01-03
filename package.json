@@ -1,0 +1,8 @@
+{
+  "name": "node static server",
+  "version": "1.0.0",
+  "description": "node static server",
+  "dependencies": {
+    "mime": "~1.2.7"
+  }
+}
