@@ -1,26 +1,14 @@
 /**
-The MIT License (MIT)
 
-Copyright (c) 2014 
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
- * 功能：实现了Node版的静态服务器
- * 实现了缓存，gzip压缩等
- * @ author      hellfire
- * @ date        2014/12/1
+ * Node 版静态资源文件服务器
+ * 功能：实现了缓存、gzip压缩等
+ *
+ * @author      liufeng.clf
+ * @date        2014/12/1
  */
 
  // 设置端口号
-var PORT = 8000;
+var PORT = 8000 || process.env.PORT;
 
 // 引入模块
 var http = require('http');
@@ -32,6 +20,8 @@ var zlib = require('zlib');
 // 引入文件
 var mime = require('./mime').types;
 var config = require('./config');
+
+
 var server = http.createServer(function (req, res) {
 	res.setHeader("Server","Node/V8");
 	// 获取文件路径
@@ -48,9 +38,10 @@ var server = http.createServer(function (req, res) {
 			res.writeHead(404, "Not Found", {'Content-Type': 'text/plain'});
 			res.write("The request url" + pathName +" is not found!");
 			res.end();
-		} else {                      // 当文件存在时的处理逻辑
+		} else {                      
+			// 当文件存在时的处理逻辑
 			fs.stat(realPath, function(err, stat) {
-                            // 获取文件扩展名
+                // 获取文件扩展名
                 var ext = path.extname(realPath);
                 ext = ext ? ext.slice(1) : "unknown";
                 var contentType = mime[ext] || "text/plain";
@@ -103,7 +94,8 @@ var server = http.createServer(function (req, res) {
 		}
 	});
 });
-//监听8000端口
+
+//监听端口，提供静态资源服务
 server.listen(PORT, function() {
 	console.log("Server is listening on port " + PORT + "!");
 });
